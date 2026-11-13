@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxia de Amor - Ana Lisbeth</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <!-- Estrellas del fondo y estrellas fugaces -->
+    <div class="estrellas" id="estrellas"></div>
+    <div class="estrellas-fugaces" id="estrellas-fugaces"></div>
+
+    <!-- Indicador superior sutil -->
+    <p class="instruccion">Toca los corazones de la galaxia o haz clic en el espacio ✨</p>
+
+    <!-- Contenedor principal de la galaxia -->
+    <div class="galaxia">
+        <!-- Núcleo central con el nombre en mayúsculas y corazones a los lados -->
+        <div class="nucleo" id="nucleo">
+            <div class="corazon-central"></div>
+            <div class="nombre-centro">
+                <span>💖</span>
+                <span class="texto-nombre">ANA LISBETH<br>CERCADO TARRILLO</span>
+                <span>💖</span>
+            </div>
+        </div>
+
+        <!-- Órbita 1 -->
+        <div class="orbita orbita-1">
+            <div class="planeta p1" data-halago="Tu sonrisa ilumina hasta mis días más oscuros ✨">❤️</div>
+            <div class="planeta p2" data-halago="Eres mi pensamiento favorito cada mañana ☀️">💖</div>
+        </div>
+
+        <!-- Órbita 2 -->
+        <div class="orbita orbita-2">
+            <div class="planeta p3" data-halago="Contigo todo se siente más bonito y en paz 🌸">💗</div>
+            <div class="planeta p4" data-halago="Admiro la persona increíble que eres 💫">✨</div>
+            <div class="planeta p5" data-halago="Tu mirada tiene una magia única 🌹">💓</div>
+        </div>
+
+        <!-- Órbita 3 -->
+        <div class="orbita orbita-3">
+            <div class="planeta p6" data-halago="Eres lo mejor que me ha pasado en este universo 🪐">💝</div>
+            <div class="planeta p7" data-halago="Me encanta tu forma de ver la vida 🦋">💌</div>
+            <div class="planeta p8" data-halago="Tienes el corazón más lindo del mundo 💕">💘</div>
+            <div class="planeta p9" data-halago="Cada momento a tu lado vale oro ⭐">💞</div>
+        </div>
+
+        <!-- Órbita 4 -->
+        <div class="orbita orbita-4">
+            <div class="planeta p10" data-halago="No cambiaría por nada lo que tenemos 🌙">❤️‍🔥</div>
+            <div class="planeta p11" data-halago="Eres mi lugar seguro 🏡">💖</div>
+            <div class="planeta p12" data-halago="Simplemente me fascinas 😍">💫</div>
+        </div>
+    </div>
+
+    <!-- Burbuja dinámica para los halagos -->
+    <div class="tarjeta-halago" id="tarjeta-halago">
+        <span id="texto-halago"></span>
+    </div>
+
+    <!-- Tarjeta de mensaje principal al hacer clic en el núcleo -->
+    <div class="mensaje-oculto" id="mensaje">
+        <h2>Para Ana Lisbeth ✨</h2>
+        <p>Eres el centro de mi universo. En esta galaxia infinita llena de estrellas, mi lugar favorito siempre será a tu lado. Gracias por hacer mi mundo tan especial.</p>
+        <button id="cerrar">Seguir explorando</button>
+    </div>
+
+    <script>
+        // --- 1. GENERAR 450 ESTRELLAS PARPADENATES ---
+        const contenedorEstrellas = document.getElementById('estrellas');
+        const coloresEstrellas = ['#ffffff', '#ffe4f2', '#ffd1dc', '#e0d7ff', '#fff5ba'];
+
+        for (let i = 0; i < 450; i++) {
+            const estrella = document.createElement('div');
+            estrella.classList.add('estrella');
+            estrella.style.left = Math.random() * 100 + 'vw';
+            estrella.style.top = Math.random() * 100 + 'vh';
+            
+            // Variación de tamaños (muchas pequeñitas y algunas más brillantes)
+            const tamano = Math.random() < 0.8 ? (Math.random() * 2 + 1) : (Math.random() * 2.5 + 2.5);
+            estrella.style.width = tamano + 'px';
+            estrella.style.height = tamano + 'px';
+            
+            const color = coloresEstrellas[Math.floor(Math.random() * coloresEstrellas.length)];
+            estrella.style.background = color;
+            estrella.style.boxShadow = `0 0 ${tamano * 2.5}px ${color}`;
+            
+            estrella.style.animationDuration = (Math.random() * 3 + 1.2) + 's';
+            estrella.style.animationDelay = Math.random() * 3 + 's';
+            contenedorEstrellas.appendChild(estrella);
+        }
+
+        // --- 2. GENERAR ESTRELLAS FUGACES PERIÓDICAS ---
+        const contenedorFugaces = document.getElementById('estrellas-fugaces');
+        setInterval(() => {
+            const fugaz = document.createElement('div');
+            fugaz.classList.add('estrella-fugaz');
+            fugaz.style.left = (Math.random() * 80 + 10) + 'vw';
+            fugaz.style.top = (Math.random() * 40) + 'vh';
+            contenedorFugaces.appendChild(fugaz);
+
+            setTimeout(() => {
+                fugaz.remove();
+            }, 1200);
+        }, 2800);
+
+        // --- 3. MENSAJE PRINCIPAL DEL NÚCLEO ---
+        const nucleo = document.getElementById('nucleo');
+        const mensaje = document.getElementById('mensaje');
+        const cerrar = document.getElementById('cerrar');
+
+        nucleo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mensaje.classList.add('mostrar');
+        });
+
+        cerrar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mensaje.classList.remove('mostrar');
+        });
+
+        // --- 4. HALAGOS EN PLANETAS ---
+        const planetas = document.querySelectorAll('.planeta');
+        const tarjetaHalago = document.getElementById('tarjeta-halago');
+        const textoHalago = document.getElementById('texto-halago');
+        let temporizadorHalago;
+
+        planetas.forEach(planeta => {
+            const mostrarHalago = (e) => {
+                e.stopPropagation();
+                textoHalago.textContent = planeta.getAttribute('data-halago');
+                tarjetaHalago.classList.add('visible');
+
+                clearTimeout(temporizadorHalago);
+                temporizadorHalago = setTimeout(() => {
+                    tarjetaHalago.classList.remove('visible');
+                }, 3500);
+            };
+
+            planeta.addEventListener('click', mostrarHalago);
+            planeta.addEventListener('mouseenter', mostrarHalago);
+        });
+
+        // --- 5. CORAZONES FLOTANTES AL HACER CLIC ---
+        document.body.addEventListener('click', (e) => {
+            const emojis = ['❤️', '💖', '💗', '✨', '💕', '🌸'];
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon-clic');
+            corazon.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            corazon.style.left = e.clientX + 'px';
+            corazon.style.top = e.clientY + 'px';
+            document.body.appendChild(corazon);
+
+            setTimeout(() => {
+                corazon.remove();
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
